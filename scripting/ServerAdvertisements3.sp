@@ -5,8 +5,8 @@
 #include <multicolors>
 #include <smlib/strings>
 
-#include "files/globals.sp"
-#include "files/client.sp"
+#include "ESK0/ServerAdvertisements3/globals.sp"
+#include "ESK0/ServerAdvertisements3/client.sp"
 
 #pragma newdecls required
 #pragma semicolon 1
@@ -17,7 +17,7 @@
 #define MAX_AUTHID_LENGTH 64 /**< Maximum buffer required to store any AuthID type */
 #endif // !MAX_AUTHID_LENGTH
 
-#include "files/misc.sp"
+#include "ESK0/ServerAdvertisements3/misc.sp"
 
 public Plugin myinfo =
 {
@@ -35,7 +35,7 @@ public void OnPluginStart()
 	CreateConVar("SA3_version", PLUGIN_VERSION, "ServerAdvertisement3", FCVAR_SPONLY | FCVAR_NOTIFY);
 	AutoExecConfig(true, "ServerAdvertisements3");
 
-	RegAdminCmd("sm_sa3r", Command_sa3r, ADMFLAG_ROOT, "Message reload");
+	RegAdminCmd("sm_sa3r", Command_Reload, ADMFLAG_ROOT, "Message Reload");
 
 	RegConsoleCmd("sm_sa3lang", Command_ChangeLanguage);
 
@@ -54,6 +54,7 @@ public void OnPluginStart()
 
 	HookEvent("player_disconnect", OnPlayerDisconnect);
 }
+
 public void OnMapStart()
 {
 	char sTempMap[PLATFORM_MAX_PATH];
@@ -89,10 +90,10 @@ public void OnMapEnd()
 
 		delete group.mMessages;
 	}
-
 	delete periods;
 	gMessageGroups.Clear();
 }
+
 public void OnClientPostAdminCheck(int client)
 {
 	if(IsValidClient(client))
@@ -109,6 +110,7 @@ public void OnClientPostAdminCheck(int client)
 		}
 	}
 }
+
 public void OnPlayerDisconnect(Event event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
@@ -120,6 +122,7 @@ public void OnPlayerDisconnect(Event event, const char[] name, bool dontBroadcas
 		gGreetedAuthIds.Remove(authId);
 	}
 }
+
 public Action Command_ChangeLanguage(int client, int args)
 {
 	if(IsValidClient(client))
@@ -163,7 +166,6 @@ public Action Command_ChangeLanguage(int client, int args)
 		mSA3LangMenu.ExitButton = true;
 		mSA3LangMenu.Display(client, MENU_TIME_FOREVER);
 	}
-
 	return Plugin_Handled;
 }
 
@@ -179,8 +181,7 @@ void AddLanguageMenuItem(Menu menu, const char[] code, const char[] extra, int f
 	else
 	{
 		len = strcopy(item, sizeof(item), code);
-	}
-
+	}	
 	StrCat(item[len], sizeof(item) - len, extra);
 	menu.AddItem(code, item, flags);
 }
@@ -200,9 +201,9 @@ public int hSA3LangMenu(Menu menu, MenuAction action, int client, int Position)
 			delete menu;
 		}
 	}
-
 	return 0;
 }
+
 public Action Timer_WelcomeMessage(Handle timer, int userid)
 {
 	int client = GetClientOfUserId(userid);
@@ -211,9 +212,9 @@ public Action Timer_WelcomeMessage(Handle timer, int userid)
 	{
 		PrintMessageEntry(client, gWelcomeMessage);
 	}
-
 	return Plugin_Stop;
 }
+
 public void OnConVarChanged(ConVar cvar, const char[] oldValue, const char[] newValue)
 {
 	if(cvar == g_cV_Enabled)
@@ -227,12 +228,13 @@ public void OnConVarChanged(ConVar cvar, const char[] oldValue, const char[] new
 		}
 	}
 }
-public Action Command_sa3r(int client, int args)
+public Action Command_Reload(int client, int args)
 {
 	LoadMessages();
 	ReplyToCommand(client, "%s Messages reloaded", SA3);
 	return Plugin_Handled;
 }
+
 public void LoadConfig()
 {
 	gLanguages.Clear();
@@ -283,7 +285,7 @@ public void LoadConfig()
 		if (kvConfig.GetNum("Enabled", 1))
 		{
 			g_fWM_Delay = kvConfig.GetFloat("Delay", 5.0);
-			AddMessagesToEntry(kvConfig, gWelcomeMessage);	
+			AddMessagesToEntry(kvConfig, gWelcomeMessage);
 		}
 	}
 	else
@@ -293,6 +295,7 @@ public void LoadConfig()
 	}
 	delete kvConfig;
 }
+
 public void LoadMessages()
 {
 	OnMapEnd();
@@ -321,6 +324,7 @@ public void LoadMessages()
 	}
 	delete kvMessages;
 }
+
 public Action Timer_PrintMessage(Handle timer, float period)
 {
 	char periodBuf[32];
@@ -350,6 +354,5 @@ public Action Timer_PrintMessage(Handle timer, float period)
 			PrintMessageEntry(i, message);
 		}
 	}
-
 	return Plugin_Continue;
 }
