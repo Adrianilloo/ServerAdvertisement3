@@ -14,6 +14,7 @@ public bool SA_MySQLConnect()
 	}
 	return false;
 }
+
 public bool SA_MySQLCheckTables()
 {
 	return false;

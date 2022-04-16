@@ -6,10 +6,12 @@ stock bool IsValidClient(int client, bool alive = false)
 	}
 	return false;
 }
+
 stock bool IsPlayerAdmin(int client)
 {
 	return CheckCommandAccess(client, "", ADMFLAG_GENERIC);
 }
+
 stock bool IsPlayerVIP(int client)
 {
 	return CheckCommandAccess(client, "", ADMFLAG_GENERIC) && CheckCommandAccess(client, "", ADMFLAG_RESERVATION);

@@ -36,6 +36,7 @@ stock void AddMessagesToArray(KeyValues kv)
 		}
 	}
 }
+
 stock void AddMessagesToEntry(KeyValues kv, SMessageEntry message)
 {
 	message.mTextByLanguage = new StringMap();
@@ -52,7 +53,6 @@ stock void AddMessagesToEntry(KeyValues kv, SMessageEntry message)
 			kv.GetSectionName(name, sizeof(name));
 			SetFailState("%s '%s' translation missing in message \"%s\"", SA3, sTempLanguageName, name);
 		}
-
 		message.mTextByLanguage.SetString(sTempLanguageName, sTempLanguageMessage);
 	}
 
@@ -85,6 +85,7 @@ stock void AddMessagesToEntry(KeyValues kv, SMessageEntry message)
 		message.mHUDParams.PushArray(params);
 	}
 }
+
 stock void CheckMessageVariables(char[] message, int len)
 {
 	char sBuffer[256];
@@ -184,6 +185,7 @@ stock void CheckMessageVariables(char[] message, int len)
 		FormatEx(sBuffer, sizeof(sBuffer), "%d:%02d", i_Minutes, i_Seconds);
 		ReplaceString(message, len, "{TIMELEFT}", sBuffer);
 	}
+	
 	if(StrContains(message, "{ADMINSONLINE}") != -1)
 	{
 		char sAdminList[128], separator[3];
@@ -199,6 +201,7 @@ stock void CheckMessageVariables(char[] message, int len)
 		}
 		ReplaceString(message, len, "{ADMINSONLINE}", sAdminList);
 	}
+	
 	if(StrContains(message, "{VIPONLINE}") != -1)
 	{
 		char sVIPList[128], separator[3];
@@ -215,6 +218,7 @@ stock void CheckMessageVariables(char[] message, int len)
 		ReplaceString(message, len, "{VIPONLINE}", sVIPList);
 	}
 }
+
 stock void SA_GetClientLanguage(int client, char buffer[3])
 {
 	char sBuffer[12], sIP[26];
@@ -248,6 +252,7 @@ stock void SA_GetClientLanguage(int client, char buffer[3])
 		delete languages;
 	}
 }
+
 stock void CheckMessageClientVariables(int client, char[] message, int len)
 {
 	char sBuffer[256];
@@ -263,6 +268,7 @@ stock void CheckMessageClientVariables(int client, char[] message, int len)
 		ReplaceString(message, len, "{PLAYERNAME}", sBuffer);
 	}
 }
+
 stock int CountPlayers()
 {
 	int count = 0;
@@ -272,6 +278,7 @@ stock int CountPlayers()
 	}
 	return count;
 }
+
 stock void GetServerIP(char[] buffer, int len)
 {
 	int ips[4];
@@ -347,6 +354,7 @@ stock bool SA_DateCompare(int currentdate[3], int availabletill[3])
 	}
 	return false;
 }
+
 stock bool SA_CheckIfMapIsBanned(const char[] currentmap, const char[] bannedmap)
 {
 	char sBannedMapExploded[64][256];
@@ -360,6 +368,7 @@ stock bool SA_CheckIfMapIsBanned(const char[] currentmap, const char[] bannedmap
 	}
 	return false;
 }
+
 stock bool SA_ContainsMapPreFix(const char[] mapname, const char[] prefix)
 {
 	char sPreFixExploded[32][12];
@@ -373,6 +382,7 @@ stock bool SA_ContainsMapPreFix(const char[] mapname, const char[] prefix)
 	}
 	return false;
 }
+
 stock bool SA_ContainsMap(const char[] currentmap, const char[] mapname)
 {
 	char sMapExploded[32][12];
@@ -386,10 +396,12 @@ stock bool SA_ContainsMap(const char[] currentmap, const char[] mapname)
 	}
 	return false;
 }
+
 stock void SA_GetInGameLanguage(int client, char[] sLanguage, int len)
 {
 	GetLanguageInfo(GetClientLanguage(client), sLanguage, len);
 }
+
 stock bool SA_CheckDate(KeyValues kv)
 {
 	char sEnabledTill[32], sEnabledTillEx[3][12], name[MAX_NAME_LENGTH];
